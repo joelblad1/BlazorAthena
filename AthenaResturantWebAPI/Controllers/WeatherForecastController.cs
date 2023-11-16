@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AthenaWebAPI.Controllers
+namespace AthenaResturantWebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,5 +1,5 @@
 
-namespace AthenaWebAPI
+namespace AthenaResturantWebAPI
 {
     public class Program
     {
