@@ -6,7 +6,7 @@ namespace BlazorAthena.Models
     {
 
         [Key]
-        public int ProductID { get; set; }
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

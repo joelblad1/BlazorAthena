@@ -7,7 +7,7 @@ namespace BlazorAthena.Models
     {
         // känns klar
         [Key]
-        public int OrderID { get; set; }
+        public int ID { get; set; }
         [ForeignKey("OrderLine")]
         public int OrderLineID { get; set; }
         public string? Comment { get; set; } 
