@@ -10,6 +10,7 @@ namespace BlazorAthena.Models
         public int ID { get; set; }
         [ForeignKey("OrderLine")]
         public int OrderLineID { get; set; }
+        public OrderLine OrderLine { get; set; }
         public string? Comment { get; set; } 
         public bool Accepted { get; set; } = false;
         public DateTime TimeStamp { get; set; } = DateTime.Now;
