@@ -7,7 +7,7 @@ namespace BlazorAthena.Models
         [Key]
         public int ID { get; set; } 
         [Required]
-        string Name { get; set; }
+        public string Name { get; set; }
 
     }
 }
