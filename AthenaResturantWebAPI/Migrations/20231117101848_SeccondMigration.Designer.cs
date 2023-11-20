@@ -4,6 +4,7 @@ using AthenaResturantWebAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AthenaResturantWebAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231117101848_SeccondMigration")]
+    partial class SeccondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,8 +53,6 @@ namespace AthenaResturantWebAPI.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("OrderLineID");
-
                     b.ToTable("Orders");
                 });
 
@@ -70,8 +71,6 @@ namespace AthenaResturantWebAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("ProductID");
 
                     b.ToTable("OrderLines");
                 });
@@ -109,12 +108,7 @@ namespace AthenaResturantWebAPI.Migrations
                     b.Property<int>("SubCategory")
                         .HasColumnType("int");
 
-                    b.Property<int>("subCategoryID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("subCategoryID");
 
                     b.ToTable("Products");
 
@@ -130,11 +124,6 @@ namespace AthenaResturantWebAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -153,39 +142,6 @@ namespace AthenaResturantWebAPI.Migrations
                     b.HasBaseType("BlazorAthena.Models.Product");
 
                     b.HasDiscriminator().HasValue("Food");
-                });
-
-            modelBuilder.Entity("BlazorAthena.Models.Order", b =>
-                {
-                    b.HasOne("BlazorAthena.Models.OrderLine", "OrderLine")
-                        .WithMany()
-                        .HasForeignKey("OrderLineID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrderLine");
-                });
-
-            modelBuilder.Entity("BlazorAthena.Models.OrderLine", b =>
-                {
-                    b.HasOne("BlazorAthena.Models.Product", "product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("product");
-                });
-
-            modelBuilder.Entity("BlazorAthena.Models.Product", b =>
-                {
-                    b.HasOne("BlazorAthena.Models.SubCategory", "subCategory")
-                        .WithMany()
-                        .HasForeignKey("subCategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("subCategory");
                 });
 #pragma warning restore 612, 618
         }
