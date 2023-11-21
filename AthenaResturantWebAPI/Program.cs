@@ -1,6 +1,7 @@
 
 using AthenaResturantWebAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using AthenaResturantWebAPI.Controllers;
 
 namespace AthenaResturantWebAPI
 {
@@ -33,6 +34,8 @@ namespace AthenaResturantWebAPI
 
 
             app.MapControllers();
+
+                        app.MapSubCategoryEndpoints();
 
             app.Run();
         }
