@@ -40,7 +40,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Refreshing carbonated beverage",
                         Image = "soda.png",
                         Available = true,
-                        SubCategory = bevrageSubCategory.ID
+                        SubCategoryId = bevrageSubCategory.ID
 
                     },
                     new Product
@@ -51,7 +51,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Chilled tea served with ice",
                         Image = "iced_tea.jpg",
                         Available = true,
-                        SubCategory = bevrageSubCategory.ID
+                        SubCategoryId = bevrageSubCategory.ID
 
                     },
                     new Product
@@ -62,7 +62,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Blend of fresh fruits and yogurt",
                         Image = "Blended-fruit-smoothies.jpg",
                         Available = true,
-                        SubCategory = bevrageSubCategory.ID
+                        SubCategoryId = bevrageSubCategory.ID
 
                     },
                     new Product
@@ -73,7 +73,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Grilled chicken breast with fresh veggies on a bun",
                         Image = "grilled_chicken_sandwich.jpg",
                         Available = true,
-                        SubCategory = mainCourseSubCategory.ID
+                        SubCategoryId = mainCourseSubCategory.ID
 
                     },
                     new Product
@@ -84,7 +84,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Juicy beef patty with lettuce, tomato and cheese",
                         Image = "Classic_Burger.jpg",
                         Available = true,
-                        SubCategory = mainCourseSubCategory.ID
+                        SubCategoryId = mainCourseSubCategory.ID
 
                     },
                     new Product
@@ -95,7 +95,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Thin-crust pizza with assorted veggies",
                         Image = "Vegetable-Pizza.jpg",
                         Available = true,
-                        SubCategory = mainCourseSubCategory.ID
+                        SubCategoryId = mainCourseSubCategory.ID
 
                     },
                     new Product
@@ -105,7 +105,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Freshly grilled salmon fillet with lemon butter",
                         Image = "grilled_Salmon.jpg",
                         Available = true,
-                        SubCategory = mainCourseSubCategory.ID
+                        SubCategoryId = mainCourseSubCategory.ID
                     },
 
 
@@ -117,7 +117,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Warm chocolate brownie topped with vanilla ice cream and hot fudge",
                         Image = "Fudge_Sunday.jpg",
                         Available = true,
-                        SubCategory = dessertSubCategory.ID
+                        SubCategoryId = dessertSubCategory.ID
 
 
                     },
@@ -129,7 +129,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Creamy and rich New York - style cheesecake",
                         Image = "CheeseCake.jpg",
                         Available = true,
-                        SubCategory = dessertSubCategory.ID
+                        SubCategoryId = dessertSubCategory.ID
 
 
                     },
@@ -141,7 +141,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Decadent chocolate fudge brownie",
                         Image = "Brownie.jpg",
                         Available = true,
-                        SubCategory = dessertSubCategory.ID
+                        SubCategoryId = dessertSubCategory.ID
 
 
                     },
@@ -153,7 +153,7 @@ namespace AthenaResturantWebAPI.Services
                         Description = "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone",
                         Image = "Tiramisu.jpg",
                         Available = true,
-                        SubCategory = dessertSubCategory.ID
+                        SubCategoryId = dessertSubCategory.ID
 
                     }
                     

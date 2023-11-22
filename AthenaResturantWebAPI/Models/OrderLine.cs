@@ -11,7 +11,7 @@ namespace BlazorAthena.Models
 
         [ForeignKey ("Product")]
         public int ProductID { get; set; }
-        public Product product { get; set; }
+        public Product Product { get; set; }
 
         public int Quantity { get; set; } = 0;
     }

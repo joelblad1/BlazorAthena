@@ -18,8 +18,8 @@ namespace BlazorAthena.Models
         [Required]
         public bool Available { get; set; } = true;
         [ForeignKey("SubCategory")]
-        public int SubCategory {  get; set; }
-        public SubCategory subCategory { get; set; }
+        public int SubCategoryId {  get; set; }
+        public SubCategory SubCategory { get; set; }
 
 
 
