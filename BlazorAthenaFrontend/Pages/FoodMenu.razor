@@ -1,11 +1,12 @@
 ﻿@inject HttpClient httpClient
+@page "/foodmenu"
 @code {
     private List<string> productList;
     //This is a comment for a bugfix
     //fetching the data when the component(the returned thingy) is initialized
     protected override async Task OnInitializedAsync()
     {
-        productList = await httpClient.GetFromJsonAsync<List<string>>("https://localhost:5001/api/Product");
+        productList = await httpClient.GetFromJsonAsync<List<string>>("https://localhost:7088/api/Product");
     }
 }
 <h3>Product List</h3>

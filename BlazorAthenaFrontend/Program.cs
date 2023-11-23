@@ -1,6 +1,6 @@
 using BlazorAthenaFrontend.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+
+
 
 namespace BlazorAthenaFrontend
 {
@@ -15,6 +15,13 @@ namespace BlazorAthenaFrontend
             builder.Services.AddServerSideBlazor();
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<SubCategoryService>();
+
+            builder.Services.AddScoped<ProductService>();
+
+            builder.Services.AddHttpClient<ProductService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7088/");
+            });
 
             var app = builder.Build();
 
