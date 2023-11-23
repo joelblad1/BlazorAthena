@@ -1,0 +1,41 @@
+﻿@page "/subs"
+@using BlazorAthenaFrontend.Data
+@inject SubCategoryService scs
+<PageTitle>sub test</PageTitle>
+
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (subs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sub in subs)
+            {
+                <tr>
+                    <td>@sub.ID</td>
+                    <td>@sub.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private SubCategory[]? subs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        subs = await scs.GetSubCategoryAsync();
+    }
+}

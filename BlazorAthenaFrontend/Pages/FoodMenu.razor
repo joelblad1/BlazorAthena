@@ -1,0 +1,28 @@
+﻿@inject HttpClient httpClient
+@code {
+    private List<string> productList;
+
+    //fetching the data when the component(the returned thingy) is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        productList = await httpClient.GetFromJsonAsync<List<string>>("https://localhost:5001/api/Product");
+    }
+}
+<h3>Product List</h3>
+
+@if (productList == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var product in productList)
+        {
+            <li>@product</li>
+        }
+    </ul>
+}
+
+
+
