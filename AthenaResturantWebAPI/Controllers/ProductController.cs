@@ -1,4 +1,5 @@
 ﻿using AthenaResturantWebAPI.Data.Context;
+using AthenaResturantWebAPI.Services;
 using BlazorAthena.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,20 +11,27 @@ namespace AthenaResturantWebAPI.Controllers
     public class ProductController : Controller
     {
 
-        private readonly AppDbContext _context;
-
-        public ProductController(AppDbContext context)
+       private readonly ProductServices _productServices;
+        
+    public ProductController(ProductServices productServices)
         {
-            _context = context;
+            _productServices = productServices;
+        }
 
+        [HttpGet(Name = "GetProductList")]
+        public ActionResult<IEnumerable<Product>> Get()
+        {
+            var listOfProducts = _productServices.GetProducts();
+
+            if (listOfProducts == null)
+            {
+                return NotFound(); // Or any other appropriate HTTP status code
+            }
+
+            return Ok(listOfProducts);
         }
 
 
-        // GET: api/Product
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
-        {
-            return await _context.Products.ToListAsync();
-        }
+
     }
 }

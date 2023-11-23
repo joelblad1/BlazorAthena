@@ -1,4 +1,3 @@
-
 using AthenaResturantWebAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using AthenaResturantWebAPI.Controllers;
@@ -15,6 +14,18 @@ namespace AthenaResturantWebAPI
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddControllers();
+
+            // CORS configuration
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -30,8 +41,12 @@ namespace AthenaResturantWebAPI
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseRouting();
 
+            // CORS middleware
+            app.UseCors();
+
+            app.UseAuthorization();
 
             app.MapControllers();
 

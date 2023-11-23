@@ -1,18 +1,28 @@
-﻿@page "/foodmenu"
-
-<PageTitle>Food Menu</PageTitle>
-
-<h1>Food Menu</h1>
-
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-
+﻿@inject HttpClient httpClient
 @code {
-    private int currentCount = 0;
+    private List<string> productList;
 
-    private void IncrementCount()
+    //fetching the data when the component(the returned thingy) is initialized
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        productList = await httpClient.GetFromJsonAsync<List<string>>("https://localhost:5001/api/Product");
     }
 }
+<h3>Product List</h3>
+
+@if (productList == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var product in productList)
+        {
+            <li>@product</li>
+        }
+    </ul>
+}
+
+
+
