@@ -9,8 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
-
-  <ItemGroup>
     <ProjectReference Include="..\AthenaResturantWebAPI\AthenaResturantWebAPI.csproj" />
   </ItemGroup>
 
