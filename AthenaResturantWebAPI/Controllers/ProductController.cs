@@ -5,30 +5,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AthenaResturantWebAPI.Controllers
-{
-    [Route("api/[controller]")]
+{   
     [ApiController]
+    [Route("api/[controller]")]
+    
     public class ProductController : Controller
     {
 
-       private readonly ProductServices _productServices;
-        
-    public ProductController(ProductServices productServices)
+ 
+         private readonly AppDbContext _context;
+
+        public ProductController (AppDbContext context)
         {
-            _productServices = productServices;
+            _context = context;
         }
+
 
         [HttpGet(Name = "GetProductList")]
         public ActionResult<IEnumerable<Product>> Get()
         {
-            var listOfProducts = _productServices.GetProducts();
+          
 
-            if (listOfProducts == null)
+                var productList = _context.Products.Select(p => p.Name).ToList();
+
+
+            if (productList == null)
             {
                 return NotFound(); // Or any other appropriate HTTP status code
             }
 
-            return Ok(listOfProducts);
+            return Ok(productList);
         }
 
 

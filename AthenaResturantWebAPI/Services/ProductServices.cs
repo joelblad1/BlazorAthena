@@ -1,24 +1,29 @@
-﻿using AthenaResturantWebAPI.Data.Context;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
-namespace AthenaResturantWebAPI.Services
+public class ProductService
 {
-    public class ProductServices
+    private readonly HttpClient httpClient;
+
+    public ProductService(HttpClient httpClient)
     {
-        private readonly AppDbContext _context;
+        this.httpClient = httpClient;
+    }
 
-        public ProductServices (AppDbContext context)
+    public async Task<List<string>> GetProductListAsync()
+    {
+        try
         {
-            _context = context;
+            return await httpClient.GetFromJsonAsync<List<string>>("https://localhost:5127/api/Product");
         }
-
-        public List<string> GetProducts ()
+        catch (Exception ex)
         {
-
-            var productList = _context.Products.Select(p => p.Name).ToList();
-
-            return productList;
-
+            // Handle the exception (e.g., log it, throw a custom exception)
+            Console.Error.WriteLine($"Error fetching data: {ex.Message}");
+            return null;
         }
-
     }
 }

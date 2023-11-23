@@ -1,6 +1,7 @@
 using AthenaResturantWebAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using AthenaResturantWebAPI.Controllers;
+using AthenaResturantWebAPI.Services; // Add the appropriate namespace for ProductServices
 
 namespace AthenaResturantWebAPI
 {
@@ -14,6 +15,13 @@ namespace AthenaResturantWebAPI
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddControllers();
+
+            // AddScoped for ProductServices
+            builder.Services.AddScoped<ProductService>();
+
+            // AddHttpClient registration
+            builder.Services.AddHttpClient();
+
 
             // CORS configuration
             builder.Services.AddCors(options =>
@@ -50,7 +58,7 @@ namespace AthenaResturantWebAPI
 
             app.MapControllers();
 
-                        app.MapSubCategoryEndpoints();
+            app.MapSubCategoryEndpoints();
 
             app.Run();
         }
