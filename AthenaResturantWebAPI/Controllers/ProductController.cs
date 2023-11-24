@@ -24,9 +24,14 @@ namespace AthenaResturantWebAPI.Controllers
         [HttpGet(Name = "GetProductList")]
         public ActionResult<IEnumerable<Product>> Get()
         {
-          
 
-                var productList = _context.Products.Select(p => p.Name).ToList();
+
+            //var productList = _context.Products.Select(p => p.Name).ToList();
+
+            var productList = _context.Products
+                .Select(p => new Product { Name = p.Name, Price = p.Price, Description = p.Description, SubCategoryId = p.SubCategoryId })
+                .ToList();
+
 
 
             if (productList == null)
