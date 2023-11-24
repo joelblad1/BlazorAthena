@@ -1,29 +1,71 @@
-﻿@inject HttpClient httpClient
+﻿@using BlazorAthenaFrontend.Models
+@inject HttpClient httpClient
 @page "/foodmenu"
 @code {
-    private List<string> productList;
-    //This is a comment for a bugfix
-    //fetching the data when the component(the returned thingy) is initialized
+    private List<Products> productList;
+
+    // This is a comment for a bugfix
+    // Fetching the data when the component(the returned thingy) is initialized
     protected override async Task OnInitializedAsync()
     {
-        productList = await httpClient.GetFromJsonAsync<List<string>>("https://localhost:7088/api/Product");
+        productList = await httpClient.GetFromJsonAsync<List<Products>>("https://localhost:7088/api/Product");
     }
 }
-<h3>Product List</h3>
 
-@if (productList == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <ul>
-        @foreach (var product in productList)
-        {
-            <li>@product</li>
+<div style="display: flex; justify-content: space-between;">
+
+    <div style="width: 45%; text-align: center; margin: 1rem;">
+		<h2>À la carte</h2>
+        <br />
+
+        @{
+            int drinksSubCategoryID = 3; //if this were to ever change in the db
         }
-    </ul>
-}
 
+        @if (productList == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <ul style="list-style: none;">
+                @foreach (var product in productList)
+                {
+                    if (product != null && product.SubCategoryId != drinksSubCategoryID)
+                    {
+                        <li style="margin-bottom: 0.8rem;">
+                            <h4>@product.Name</h4>
+                            <i>@product.Description</i>
+                            <br />
+                            <strong>Price:</strong> @product.Price SEK
+                            <hr style="height: 0.2rem; background-color: purple; opacity: 1; width: 3rem; margin: 0.5rem auto;" />
+                            <br />
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    </div>
 
-
+    <div style="width: 45%; text-align: center; margin: 1rem;">
+        <h2>Drinks</h2>
+        <br />
+        @if (productList != null)
+        {
+            <ul style="list-style: none;">
+                @foreach (var product in productList)
+                {
+                    if (product != null && product.SubCategoryId == drinksSubCategoryID)
+                    {
+                        <li style="margin-bottom: 0.8rem;">
+                            <h4>@product.Name</h4>
+                            <strong>Price:</strong> @product.Price SEK
+                            <hr style="height: 0.2rem; background-color: purple; opacity: 1; width: 3rem; margin: 0.5rem auto;" />
+                            <br />
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    </div>
+</div>

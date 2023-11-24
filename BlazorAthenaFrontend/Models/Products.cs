@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlazorAthenaFrontend.Models
 {
-    public class Productcs
+    public class Products
     {
         [Key]
         public int ID { get; set; }
