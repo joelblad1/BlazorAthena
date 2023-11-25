@@ -1,6 +1,5 @@
 using BlazorAthenaFrontend.Data;
-
-
+using BlazorAthenaFrontend.Services;
 
 namespace BlazorAthenaFrontend
 {
@@ -17,11 +16,13 @@ namespace BlazorAthenaFrontend
             builder.Services.AddSingleton<SubCategoryService>();
 
             builder.Services.AddScoped<ProductService>();
+            
 
             builder.Services.AddHttpClient<ProductService>(client =>
             {
                 client.BaseAddress = new Uri("https://localhost:7088/");
             });
+            builder.Services.AddScoped<CartService>();
 
             var app = builder.Build();
 
