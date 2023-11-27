@@ -1,10 +1,13 @@
 ﻿using BlazorAthena.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlazorAthenaFrontend.Models
 {
-    public class Food : Product
+    public class Food
     {
-        bool Lactose { get; set; } = false;
-        bool Nuts { get; set; } = false;
+        [Key]
+        public int ID { get; set; }
+        public bool Lactose { get; set; } = false;
+        public bool Nuts { get; set; } = false;
     }
 }
