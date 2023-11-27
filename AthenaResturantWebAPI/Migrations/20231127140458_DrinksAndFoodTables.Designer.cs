@@ -4,6 +4,7 @@ using AthenaResturantWebAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AthenaResturantWebAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127140458_DrinksAndFoodTables")]
+    partial class DrinksAndFoodTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,7 +134,6 @@ namespace AthenaResturantWebAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("FoodID")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
@@ -200,17 +202,15 @@ namespace AthenaResturantWebAPI.Migrations
 
             modelBuilder.Entity("BlazorAthena.Models.Product", b =>
                 {
-                    b.HasOne("BlazorAthena.Models.Drink", "Drink")
+                    b.HasOne("BlazorAthena.Models.Drink", "drinkID")
                         .WithMany()
                         .HasForeignKey("DrinkID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazorAthena.Models.Food", "Food")
+                    b.HasOne("BlazorAthena.Models.Food", "foodID")
                         .WithMany()
-                        .HasForeignKey("FoodID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FoodID");
 
                     b.HasOne("BlazorAthena.Models.SubCategory", "SubCategory")
                         .WithMany()
@@ -218,11 +218,11 @@ namespace AthenaResturantWebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Drink");
-
-                    b.Navigation("Food");
-
                     b.Navigation("SubCategory");
+
+                    b.Navigation("drinkID");
+
+                    b.Navigation("foodID");
                 });
 #pragma warning restore 612, 618
         }

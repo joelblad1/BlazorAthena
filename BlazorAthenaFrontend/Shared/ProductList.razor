@@ -1,0 +1,38 @@
+﻿@page "/takeaway"
+@inject BlazorAthenaFrontend.Services.CartService CartService
+@inject System.Net.Http.HttpClient httpClient
+
+<h3>ProductList</h3>
+
+@code {
+    private List<BlazorAthenaFrontend.Models.Products> productList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        productList = await httpClient.GetFromJsonAsync<List<BlazorAthenaFrontend.Models.Products>>("https://localhost:7088/api/Product");
+    }
+
+    private async Task Purchase(int productId)
+    {
+        await CartService.AddProductToCartAsync(productId);
+    }
+}
+
+@if (productList == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var product in productList)
+    {
+        <div class="card w-25">
+            <div class="card-body">
+                <h5 class="card-title">@product?.Name</h5>
+                <p class="card-text">@product?.Description</p>
+                <blockquote class="card-text">$@(product?.Price ?? 0)</blockquote>
+                <button style="background-color: purple; color: white;" type="button" @onclick="() => Purchase(product.ID)">Order</button>
+            </div>
+        </div>
+    }
+}

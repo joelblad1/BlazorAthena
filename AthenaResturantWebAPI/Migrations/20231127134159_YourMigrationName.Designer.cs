@@ -4,6 +4,7 @@ using AthenaResturantWebAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AthenaResturantWebAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127134159_YourMigrationName")]
+    partial class YourMigrationName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,9 +33,6 @@ namespace AthenaResturantWebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int?>("AlcoholPercentage")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
                     b.ToTable("Drinks");
@@ -45,12 +45,6 @@ namespace AthenaResturantWebAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<bool>("Lactose")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Nuts")
-                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -126,12 +120,10 @@ namespace AthenaResturantWebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DrinkID")
-                        .IsRequired()
+                    b.Property<int>("DrinkID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FoodID")
-                        .IsRequired()
+                    b.Property<int>("FoodID")
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
@@ -200,13 +192,13 @@ namespace AthenaResturantWebAPI.Migrations
 
             modelBuilder.Entity("BlazorAthena.Models.Product", b =>
                 {
-                    b.HasOne("BlazorAthena.Models.Drink", "Drink")
+                    b.HasOne("BlazorAthena.Models.Drink", "drinkID")
                         .WithMany()
                         .HasForeignKey("DrinkID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazorAthena.Models.Food", "Food")
+                    b.HasOne("BlazorAthena.Models.Food", "foodID")
                         .WithMany()
                         .HasForeignKey("FoodID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -218,11 +210,11 @@ namespace AthenaResturantWebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Drink");
-
-                    b.Navigation("Food");
-
                     b.Navigation("SubCategory");
+
+                    b.Navigation("drinkID");
+
+                    b.Navigation("foodID");
                 });
 #pragma warning restore 612, 618
         }
