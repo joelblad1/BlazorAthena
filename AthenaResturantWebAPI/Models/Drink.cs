@@ -1,7 +1,8 @@
 ﻿namespace BlazorAthena.Models
 {
-    public class Drink : Product
+    public class Drink
     {
-        int? AlcoholPercentage { get; set; }
+        public int ID { get; set; }
+        public int? AlcoholPercentage { get; set; }
     }
 }
