@@ -23,12 +23,12 @@ namespace BlazorAthena.Models
         [ForeignKey("Drink")]
         public int? DrinkID { get; set; }
 
-        public Drink Drink { get; set; }
+        public Drink? Drink { get; set; }
 
         [ForeignKey("Food")]
         public int? FoodID { get; set; }
 
-        public Food Food { get; set; }
+        public Food? Food { get; set; }
 
         public bool Available { get; set; } = true;
 
