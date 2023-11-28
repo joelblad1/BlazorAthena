@@ -1,7 +1,9 @@
 using AthenaResturantWebAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using AthenaResturantWebAPI.Controllers;
-using AthenaResturantWebAPI.Services; // Add the appropriate namespace for ProductServices
+using AthenaResturantWebAPI.Services;
+using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace AthenaResturantWebAPI
 {
@@ -37,6 +39,25 @@ namespace AthenaResturantWebAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+
+
+
+            //using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+            //{
+            //    // Retrieve the required services
+            //    var services = scope.ServiceProvider;
+            //    var appDbContext = services.GetRequiredService<AppDbContext>();
+
+            //    // Call the SeedData method
+            //    var seedDataService = new GeneralServices(appDbContext, roleManager); // pass the necessary dependencies
+            //    seedDataService.SeedData();
+
+            //}
+
+
+
+
 
             var app = builder.Build();
 

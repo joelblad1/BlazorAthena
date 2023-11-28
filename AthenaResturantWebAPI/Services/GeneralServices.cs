@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using BlazorAthena.Models;
 using AthenaResturantWebAPI.Data.Context;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
 
 
 namespace AthenaResturantWebAPI.Services
@@ -225,6 +226,93 @@ namespace AthenaResturantWebAPI.Services
                     }
 
                     );
+
+                context.Drinks.AddRange(
+
+                    new Drink 
+                    {
+
+                        
+                        AlcoholPercentage = 49
+
+
+
+                    },
+                    new Drink
+                                        {
+
+
+                                            AlcoholPercentage = 80
+
+
+
+                                        },
+                    new Drink
+                                                            {
+
+
+                                                                AlcoholPercentage = 0.5m
+
+
+
+                                                            },
+                    new Drink
+                                                                                {
+
+
+                                                                                    AlcoholPercentage = 10
+
+
+
+                                                                                }
+
+
+
+
+                    );
+
+                context.Foods.AddRange(
+
+                    new Food 
+                    {
+                    Nuts = false
+                    
+                    },
+                                        new Food
+                                        {
+                                            Lactose = false
+
+                                        }
+
+                    );
+
+                context.SubCategories.AddRange(
+
+
+                     new SubCategory
+                     {
+                         Name = "Vegan"
+
+                     },
+                         new SubCategory
+                         {
+                             Name = "Soft Drink"
+
+                         },
+                             new SubCategory
+                             {
+                                 Name = "Hot Drink"
+
+                             },
+                                 new SubCategory
+                                 {
+                                     Name = "Italian"
+
+                                 }
+
+                    );
+               
+
 
                 _context.SaveChanges();
 
