@@ -18,18 +18,12 @@
 
         public async Task AddProductToCartAsync(Product chosenProduct)
         {
-            // Fetch product information from the API
-            //var product = await FetchProductAsync(chosenProduct);
-
-            //if (SelectedProducts.Contains(product) is false)
-            //{
-            //    SelectedProducts.Add(product);
-            //}
+        
             SelectedProducts.Add(chosenProduct);
         }
 
-        // In CartService.cs
-        private async Task<Product> FetchProductAsync(int productId)
+    
+        private async Task<Product> FetchProductAsync(int productId) //Not being used?
         {
             try
             {

@@ -1,16 +1,67 @@
-﻿@using BlazorAthenaFrontend.Services
+﻿@page "/checkout"
+@using BlazorAthenaFrontend.Services
+@using BlazorAthenaFrontend.Models
 @inject CartService CartService
-@page "/checkout"
+
 <h3>Checkout</h3>
-<h3>You have @CartService.SelectedProducts.Count in cart:</h3>
-@foreach (var product in CartService.SelectedProducts)
+<h3>You have @CartService.SelectedProducts.Count item(s) in your cart:</h3>
+
+@foreach (var productGroup in CartService.SelectedProducts.GroupBy(p => p.Name))
 {
+    int amountOfItems = 0;
+
+    @foreach (var product in productGroup)
+    {
+        amountOfItems++;
+    }
+
     <div>
-        @product.Name and @product.Price
+        <div>
+            @productGroup.First().Name á @productGroup.First().Price SEK
+        </div>
+        <div>
+            Amount: @amountOfItems
+        </div>
+        <div>
+            Total Price: @productGroup.Sum(p => p.Price) SEK
+        </div>
+        <button style="background-color: darkolivegreen; color: white;" @onclick="() => AddProduct(productGroup.First())">+</button>
+        <button style="background-color: darkred; color: white;" @onclick="() => RemoveProduct(productGroup.First())">-</button>
     </div>
+
+    <hr />
 }
+
 @code {
+    double totalAmount = 0;
 
+    // This method calculates the total amount
+    private void CalculateTotalAmount()
+    {
+        totalAmount = CartService.SelectedProducts.Sum(p => p.Price);
+    }
 
+    // This method adds an extra product to the cart
+    private void AddProduct(Product product)
+    {
+        CartService.SelectedProducts.Add(product);
+        CalculateTotalAmount(); // Recalculate total amount after adding the product
+    }
 
+    // This method removes a product from the cart
+    private void RemoveProduct(Product product)
+    {
+        CartService.SelectedProducts.Remove(product);
+        CalculateTotalAmount(); // Recalculate total amount after removing the product
+    }
+
+    protected override void OnInitialized()
+    {
+        CalculateTotalAmount();
+        base.OnInitialized();
+    }
 }
+
+<h3>Total amount: @totalAmount SEK</h3>
+
+<button style="background-color: purple; color: white;">Place order</button>
