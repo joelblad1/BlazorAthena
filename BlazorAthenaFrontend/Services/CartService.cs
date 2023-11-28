@@ -14,26 +14,27 @@
             this.httpClient = httpClient;
         }
 
-        public List<Products> SelectedProducts { get; set; } = new List<Products>();
+        public List<Product> SelectedProducts { get; set; } = new List<Product>();
 
-        public async Task AddProductToCartAsync(int productId)
+        public async Task AddProductToCartAsync(Product chosenProduct)
         {
             // Fetch product information from the API
-            var product = await FetchProductAsync(productId);
+            //var product = await FetchProductAsync(chosenProduct);
 
-            if (SelectedProducts.Contains(product) is false)
-            {
-                SelectedProducts.Add(product);
-            }
+            //if (SelectedProducts.Contains(product) is false)
+            //{
+            //    SelectedProducts.Add(product);
+            //}
+            SelectedProducts.Add(chosenProduct);
         }
 
         // In CartService.cs
-        private async Task<Products> FetchProductAsync(int productId)
+        private async Task<Product> FetchProductAsync(int productId)
         {
             try
             {
                 // Make an API request to get product information based on productId
-                var product = await httpClient.GetFromJsonAsync<Products>($"https://localhost:7088/api/Product/{productId}");
+                var product = await httpClient.GetFromJsonAsync<Product>($"https://localhost:7088/api/Product/{productId}");
                 return product;
             }
             catch (HttpRequestException ex)
