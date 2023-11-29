@@ -34,7 +34,8 @@ public static class SubCategoryEndpoints
             var affected = await db.SubCategories
                 .Where(model => model.ID == id)
                 .ExecuteUpdateAsync(setters => setters
-                   // .SetProperty(m => m.ID, subCategory.ID)
+                //Updating ID bad ?
+                   //.SetProperty(m => m.ID, subCategory.ID)
                     .SetProperty(m => m.Name, subCategory.Name)
                     );
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
