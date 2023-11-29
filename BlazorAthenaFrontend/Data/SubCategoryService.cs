@@ -1,17 +1,19 @@
 ﻿using AthenaResturantWebAPI.Migrations;
 using Newtonsoft.Json;
 using System.Text;
+using BlazorAthenaFrontend.Data;
 
 namespace BlazorAthenaFrontend.Data
 {
     public class SubCategoryService
     {   
+        string APIDOMAIN = Globals.APIDOMAIN;
 
         public async Task<SubCategory[]> GetSubCategoryAsync()
         {
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.GetAsync("https://localhost:7088/api/SubCategory"); //TODO global variable
+                var response = await httpClient.GetAsync($"{APIDOMAIN}/SubCategory"); //TODO global variable
                 if (response.IsSuccessStatusCode)
                 {
                     var subs = await response.Content.ReadFromJsonAsync<SubCategory[]>();
@@ -30,7 +32,7 @@ namespace BlazorAthenaFrontend.Data
             var newSubCategory = new SubCategory { ID = 0, Name = name };
             var stringContent = new StringContent(JsonConvert.SerializeObject(newSubCategory), Encoding.UTF8, "application/json");
 
-            var response = await http.PostAsync($"https://localhost:7088/api/SubCategory/", stringContent); //TODO global variable for api domain
+            var response = await http.PostAsync($"{APIDOMAIN}/SubCategory/", stringContent); //TODO global variable for api domain
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("success");
@@ -45,7 +47,7 @@ namespace BlazorAthenaFrontend.Data
         {
             HttpClient http = new HttpClient();
             
-            var response = await http.DeleteAsync($"https://localhost:7088/api/SubCategory/{id}"); //TODO global variable for api domain
+            var response = await http.DeleteAsync($"{APIDOMAIN}/SubCategory/{id}"); //TODO global variable for api domain
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("success");
@@ -60,7 +62,7 @@ namespace BlazorAthenaFrontend.Data
             var updatedSubCategory = new SubCategory { ID = 0, Name = newName };
             var stringContent = new StringContent(JsonConvert.SerializeObject(updatedSubCategory), Encoding.UTF8, "application/json");
 
-            var response = await http.PutAsync($"https://localhost:7088/api/SubCategory/{id}", stringContent ); //TODO global variable for api domain
+            var response = await http.PutAsync($"{APIDOMAIN}/SubCategory/{id}", stringContent ); //TODO global variable for api domain
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("success");
