@@ -34,25 +34,26 @@
 
 @code {
     double totalAmount = 0;
+    bool orderPlaced = false; //will check if the button "place order" has been clicked
+    DateTime timeStamp;
+    int currentUser; // will be used to store which user have made the purchase
 
-    // This method calculates the total amount
     private void CalculateTotalAmount()
     {
         totalAmount = CartService.SelectedProducts.Sum(p => p.Price);
     }
 
-    // This method adds an extra product to the cart
     private void AddProduct(Product product)
     {
         CartService.SelectedProducts.Add(product);
-        CalculateTotalAmount(); // Recalculate total amount after adding the product
+        CalculateTotalAmount(); // Recalculate the total amount
     }
 
-    // This method removes a product from the cart
+
     private void RemoveProduct(Product product)
     {
         CartService.SelectedProducts.Remove(product);
-        CalculateTotalAmount(); // Recalculate total amount after removing the product
+        CalculateTotalAmount(); 
     }
 
     protected override void OnInitialized()
@@ -60,8 +61,29 @@
         CalculateTotalAmount();
         base.OnInitialized();
     }
+
+    private void PlaceOrder()
+    {
+        orderPlaced = true;
+        timeStamp = DateTime.Now; //This variable will check against the db and send "receipt" to user if order has been approved
+        currentUser = 1; //will change depending on user ofc
+
+    }
+
 }
 
 <h3>Total amount: @totalAmount SEK</h3>
 
-<button style="background-color: purple; color: white;">Place order</button>
+<p>Add comment to the kitchen (optional)</p>
+<textarea id="userInputSummary" rows="4" cols="50" style="resize: none;"></textarea>
+<br/>
+@if (orderPlaced)
+{
+    <i style="color: red">Waiting for approval. Order can still be altered.</i>
+    <br/>
+    <i>You placed your order at @timeStamp</i>
+}
+<br/>
+
+<button style="background-color: purple; color: white;" @onclick="PlaceOrder">Place order</button>
+
