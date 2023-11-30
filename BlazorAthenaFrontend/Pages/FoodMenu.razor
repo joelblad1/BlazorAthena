@@ -10,7 +10,7 @@
     {
         productList = await httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7088/api/Product");
         foodList = await httpClient.GetFromJsonAsync<List<Food>>("https://localhost:7088/api/Food");
-        drinkList = await httpClient.GetFromJsonAsync<List<Drink>>("https://localhost:7088/api/Food");
+        drinkList = await httpClient.GetFromJsonAsync<List<Drink>>("https://localhost:7088/api/Drink");
 
     }
 }
@@ -44,7 +44,7 @@
                             <br/>
                             
                             
-                            @foreach (var food in foodList) //check if current product/food as allergi info
+                            @foreach (var food in foodList) //check if current product/food has allergi info
                             {
                                 @if (food.ID == product.FoodID )
                                 {
@@ -92,6 +92,15 @@
                     {
                         <li style="margin-bottom: 0.8rem;">
                             <h4>@product.Name</h4>
+                            @foreach (var drink in drinkList.Where(d => product.DrinkID == d.ID && d.AlcoholPercentage > 0))
+                            {
+                                
+                                <div style="font-size: small;">
+									<span>@drink.AlcoholPercentage %</span>
+                                    <br />
+                                </div>
+                                break; // Exit the loop once a drink with AlcoholPercentage > 0 is found
+                            }
                             <strong>Price:</strong> @product.Price SEK
                             <hr style="height: 0.2rem; background-color: purple; opacity: 1; width: 3rem; margin: 0.5rem auto;" />
                             <br />
