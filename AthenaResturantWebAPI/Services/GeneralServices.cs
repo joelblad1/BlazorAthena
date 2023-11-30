@@ -32,7 +32,7 @@ namespace AthenaResturantWebAPI.Services
             {
              
               
-                await CreateOrder(context);
+                
                 if (!context.Products.Any())
                 {
                     // Seed roles 
