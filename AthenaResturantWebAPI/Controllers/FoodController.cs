@@ -25,8 +25,6 @@ namespace AthenaResturantWebAPI.Controllers
         public ActionResult<IEnumerable<Product>> Get()
         {
 
-            //var productList = _context.Products.Select(p => p.Name).ToList();
-
             var FoodList = _context.Foods
                 .Select(f => new Food { ID = f.ID, Lactose = f.Lactose, Nuts = f.Nuts })
                 .ToList();
