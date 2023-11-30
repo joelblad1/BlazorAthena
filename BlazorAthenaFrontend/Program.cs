@@ -1,5 +1,8 @@
 using BlazorAthenaFrontend.Data;
+using BlazorAthenaFrontend.Data.Identity;
 using BlazorAthenaFrontend.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorAthenaFrontend
 {
@@ -8,6 +11,12 @@ namespace BlazorAthenaFrontend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var connectionString = builder.Configuration.GetConnectionString("Defaultconnection") ?? throw new InvalidOperationException("Connection string 'Defaultconnection' not found.");
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+            builder.Services.AddDefaultIdentity<ApplicationUser>
+                (options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add services to the container.
             builder.Services.AddRazorPages();

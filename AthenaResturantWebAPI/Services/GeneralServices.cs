@@ -4,233 +4,508 @@ using Microsoft.EntityFrameworkCore;
 using BlazorAthena.Models;
 using AthenaResturantWebAPI.Data.Context;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.Extensions.Hosting;
+using AthenaResturantWebAPI.Data.AppUser;
 
 namespace AthenaResturantWebAPI.Services
 {
     public class GeneralServices
     {
 
+      
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly AppDbContext _context;
-        //private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
-        public GeneralServices
-            (
-                AppDbContext appDbContext,
-                //UserManager<ApplicationUser> userManager,
-                RoleManager<IdentityRole> roleManager
-            )
+        public GeneralServices( AppDbContext appDbContext,UserManager<ApplicationUser> userManager,RoleManager<IdentityRole> roleManager)
 
         {
 
             _context = appDbContext;
-            //_userManager = userManager;
+            _userManager = userManager;
             _roleManager = roleManager;
 
         }
-
-
-        //public async Task SeedIdentityData()
-        //{
-        //    string[] roleNames = { "Admin", "User", "Manager", "Employee" };
-
-        //    // Create roles
-        //    foreach (var roleName in roleNames)
-        //    {
-        //        if (!await _roleManager.RoleExistsAsync(roleName))
-        //        {
-        //            var role = new IdentityRole { Name = roleName };
-        //            await _roleManager.CreateAsync(role);
-        //        }
-        //    }
-
-        //    // Create a default admin user
-        //    if (_userManager.Users.All(u => u.UserName != "admin@example.com"))
-        //    {
-        //        var adminUser = new ApplicationUser
-        //        {
-        //            UserName = "admin@example.com",
-        //            Email = "admin@example.com",
-        //        };
-        //        await _userManager.CreateAsync(adminUser, "Admin123!"); // Replace with your desired password
-
-        //        // Assign the admin user to the "Admin" role
-        //        await _userManager.AddToRoleAsync(adminUser, "Admin");
-        //    }
-
-        //    // Create user accounts for Kim, Julia, Joel, Peter, Paul with roles
-        //    var usersWithRoles = new List<(string UserName, string Email, string Password, string Role)>
-        //     {
-        //          ("Kim", "kim@example.com", "Password123!", "User"),
-        //          ("Julia", "julia@example.com", "Password123!", "Manager"),
-        //          ("Joel", "joel@example.com", "Password123!", "Employee"),
-        //          ("Peter", "peter@example.com", "Password123!", "Admin"),
-        //          ("Paul", "paul@example.com", "Password123!", "User")
-        //     };
-
-        //    foreach (var (userName, email, password, role) in usersWithRoles)
-        //    {
-        //        var user = await _userManager.FindByNameAsync(userName);
-
-        //        if (user == null)
-        //        {
-        //            user = new ApplicationUser { UserName = userName, Email = email };
-        //            await _userManager.CreateAsync(user, password);
-        //        }
-
-        //        if (!await _userManager.IsInRoleAsync(user, role))
-        //        {
-        //            await _userManager.AddToRoleAsync(user, role);
-        //        }
-        //    }
-          
-        //}
-        public void SeedData(AppDbContext context)
+    
+        public async Task SeedData(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            try
+            {
+             
+              
+                await CreateOrder(context);
+                if (!context.Products.Any())
+                {
+                    // Seed roles 
+                    await SeedRoles(roleManager);
+                    await AssignSubCategoryId(context);
+                    _context.SaveChanges();
+                    // Seed Drinks and Foods
+                    await AllergiesAndDrinks(context);
+                    _context.SaveChanges();
+                    // Seed Users
+                    await SeedUsersAsync(userManager);
+                    _context.SaveChanges();
+                    await AssignUserRoleAsync(userManager, roleManager, "Kim", "Employee");
+                    await AssignUserRoleAsync(userManager, roleManager, "Julia", "Manager");
+                    await AssignUserRoleAsync(userManager, roleManager, "Joel", "Admin");
+                    await AssignUserRoleAsync(userManager, roleManager, "Simon", "Admin");
+                    await AssignUserRoleAsync(userManager, roleManager, "Peter", "Manager");
+                    await AssignUserRoleAsync(userManager, roleManager, "Pual", "User");
+                    _context.SaveChanges();
+                    // Seeds Order & OrderLine
+                    await CreateOrder(context);
 
-            if (!context.Products.Any())
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any unexpected exception (log, throw, etc.)
+                Console.WriteLine($"An error occurred during seeding: {ex.Message}");
+            }
+        }
+
+        public async Task CreateOrder(AppDbContext _context)
+        {
+            if (!_context.Orders.Any())
+            {
+                // Create OrderLines
+                var orderLine1 = new OrderLine
+                {
+                    Quantity = 2,
+                    ProductID = 1,
+                };
+
+                var orderLine2 = new OrderLine
+                {
+                    Quantity = 1,
+                    ProductID = 3,
+                };
+
+                var orderLine3 = new OrderLine
+                {
+                    Quantity = 3,
+                    ProductID = 5,
+                };
+
+                var orderLine4 = new OrderLine
+                {
+                    Quantity = 1,
+                    ProductID = 2,
+                };
+
+                var orderLine5 = new OrderLine
+                {
+                    Quantity = 2,
+                    ProductID = 4,
+                };
+                var orderLine6 = new OrderLine
+                {
+                    Quantity = 1,
+                    ProductID = 6,
+                };
+
+                _context.OrderLines.AddRange(orderLine1, orderLine2, orderLine3, orderLine4, orderLine5, orderLine6);
+                await _context.SaveChangesAsync();
+
+                // Create Orders
+                _context.Orders.AddRange(
+                  new Order
+                  {
+                      OrderLineID = orderLine1.ID,
+                      Comment = "This order is so good that it should be named 'The Masterpiece'. Can't wait to taste the magic!",
+                      Accepted = true,
+                      TimeStamp = DateTime.UtcNow,
+                      KitchenComment = "This order is so good that it should be named 'The Masterpiece'",
+                      Delivered = false
+                  },
+            new Order
+            {
+                OrderLineID = orderLine2.ID,
+                Comment = "Just placed an order for the most fantastic meal! Cooking this order felt like preparing a meal for royalty.",
+                Accepted = false,
+                TimeStamp = DateTime.UtcNow,
+                KitchenComment = "Cooking this order felt like preparing a meal for royalty",
+                Delivered = true
+            },
+            new Order
+            {
+                OrderLineID = orderLine3.ID,
+                Comment = "Ordered a feast that's so amazing it deserves its own holiday! Can't wait to dig in.",
+                Accepted = true,
+                TimeStamp = DateTime.UtcNow,
+                KitchenComment = "This order is so good that it should be named 'The Masterpiece'",
+                Delivered = false
+            },
+            new Order
+            {
+                OrderLineID = orderLine4.ID,
+                Comment = "Just ordered a meal that's out of this world! If only every day could be this delicious.",
+                Accepted = false,
+                TimeStamp = DateTime.UtcNow,
+                KitchenComment = "Cooking this order felt like preparing a meal for royalty",
+                Delivered = true
+            },
+            new Order
+            {
+                OrderLineID = orderLine5.ID,
+                Comment = "Placed an order for a culinary masterpiece! Brace yourself for a taste bud explosion.",
+                Accepted = true,
+                TimeStamp = DateTime.UtcNow,
+                KitchenComment = "This order is so good that it should be named 'The Masterpiece'",
+                Delivered = false
+            },
+             new Order
+             {
+                 OrderLineID = orderLine6.ID,
+                 Comment = "Ordering this meal feels like unlocking a secret level of flavor! Can't wait to savor every bite.",
+                 Accepted = false,
+                 TimeStamp = DateTime.UtcNow, // Use UTC time
+                 KitchenComment = "Cooking this order felt like preparing a meal for royalty",
+             }
+
+            );
+
+                await _context.SaveChangesAsync();
+            }
+
+        }
+
+        private async Task<string> GetRoleIdAsync(RoleManager<IdentityRole> roleManager, string roleName)
+        {
+            // Check if the role already exists
+            var role = await roleManager.FindByNameAsync(roleName);
+
+            // If the role doesn't exist, create it
+            if (role == null)
+            {
+                role = new IdentityRole { Name = roleName };
+                await roleManager.CreateAsync(role);
+            }
+
+            return role.Id;
+        }
+        private async Task SeedUsersAsync(UserManager<ApplicationUser> userManager)
+        {
+            // List of users to be seeded
+            var users = new List<(string UserName, string NormalizedUserName, string Email, string NormalizedEmail, string Password, bool EmailConfirmed, bool LockoutEnabled)>
+    {
+        // User data: (UserName, NormalizedUserName, Email, NormalizedEmail, Password, EmailConfirmed, LockoutEnabled)
+        ("Kim", "KIM", "kim@example.com", "KIM@EXAMPLE.COM", "Password123!", true, false),
+        ("Julia", "JULIA", "julia@example.com", "JULIA@EXAMPLE.COM", "Password123!", true, false),
+        ("Joel", "JOEL", "joel@example.com", "JOEL@EXAMPLE.COM", "Password123!", true, false),
+        ("Simon", "SIMON", "simon@example.com", "SIMON@EXAMPLE.COM", "Password123!", true, false),
+        ("Peter", "PETER", "peter@example.com", "PETER@EXAMPLE.COM", "Password123!", true, false),
+        ("Paul", "PAUL", "paul@example.com", "PAUL@EXAMPLE.COM", "Password123!", true, false)
+    };
+
+            // Iterate through each user data and seed the user
+            foreach (var (userName, normalizedUserName, email, normalizedEmail, password, emailConfirmed, lockoutEnabled) in users)
+            {
+                // Check if the user already exists
+                var user = await userManager.FindByNameAsync(userName);
+
+                // If the user doesn't exist, create and seed the user
+                if (user == null)
+                {
+                    user = new ApplicationUser
+                    {
+                        UserName = userName,
+                        NormalizedUserName = normalizedUserName,
+                        Email = email,
+                        NormalizedEmail = normalizedEmail,
+                        EmailConfirmed = emailConfirmed,
+                        LockoutEnabled = lockoutEnabled
+                    };
+
+                    // Create the user and handle errors if any
+                    var result = await userManager.CreateAsync(user, password);
+
+                    if (!result.Succeeded)
+                    {
+                        Console.WriteLine($"Failed to create user '{userName}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                    }
+                }
+            }
+        }
+
+
+
+        private async Task AssignUserRoleAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, string userName, string roleName)
+        {
+            // Get user by name
+            var user = await userManager.FindByNameAsync(userName);
+
+            if (user == null)
+            {
+                Console.WriteLine($"User '{userName}' not found.");
+                return;
+            }
+
+            // Get role ID by name
+            var roleId = await GetRoleIdAsync(roleManager, roleName);
+
+            // Check if the user is already assigned to the role
+            if (!await userManager.IsInRoleAsync(user, roleName))
+            {
+                // Assign the user to the specified role
+                await userManager.AddToRoleAsync(user, roleName);
+                Console.WriteLine($"User '{userName}' assigned to role '{roleName}'.");
+            }
+            else
+            {
+                Console.WriteLine($"User '{userName}' is already assigned to role '{roleName}'.");
+            }
+        }
+
+
+        public async Task SeedRoles(RoleManager<IdentityRole> roleManager)
+        {
+            var roles = new List<string> { "Admin", "Manager", "Employee", "User" };
+
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                    Console.WriteLine($"Role '{role}' created.");
+                }
+                else
+                {
+                    Console.WriteLine($"Role '{role}' already exists.");
+                }
+            }
+        }
+
+        public Dictionary<string, int> RetrieveSubCategoryId(AppDbContext context)
+        {
+            // Retrieve SubCategory ID
+            Dictionary<string, int> subCategoryIds = context.SubCategories.ToDictionary(sub => sub.Name, sub => sub.ID);
+            return subCategoryIds;
+
+
+        }
+
+        public async Task AllergiesAndDrinks(AppDbContext context)
+        {
+            context.Drinks.AddRange(
+
+                           new Drink
+                           {
+
+
+                               AlcoholPercentage = 49
+
+
+
+                           },
+                           new Drink
+                           {
+
+
+                               AlcoholPercentage = 80
+
+
+
+                           },
+                           new Drink
+                           {
+
+
+                               AlcoholPercentage = 0.5m
+
+
+
+                           },
+                           new Drink
+                           {
+
+
+                               AlcoholPercentage = 10
+
+
+
+                           }
+
+
+
+
+                           );
+
+            context.Foods.AddRange(
+
+                new Food
+                {
+                    Nuts = false
+
+                },
+                                    new Food
+                                    {
+                                        Lactose = false
+
+                                    }
+
+                );
+
+        }
+        public async Task AssignSubCategoryId(AppDbContext context)
+
+        {
+            // RetriveSubCategoryId
+            var subCategoryIds = RetrieveSubCategoryId(context);
+
+            var bevrageSubCategory = new SubCategory { Name = "Beverages " };
+            var mainCourseSubCategory = new SubCategory { Name = "Main Courses " };
+            var dessertSubCategory = new SubCategory { Name = "Desserts " };
+
+            // Assign existing SubCategory IDs
+            bevrageSubCategory.ID = subCategoryIds.GetValueOrDefault(bevrageSubCategory.Name);
+            mainCourseSubCategory.ID = subCategoryIds.GetValueOrDefault(mainCourseSubCategory.Name);
+            dessertSubCategory.ID = subCategoryIds.GetValueOrDefault(dessertSubCategory.Name);
+
+            // Check if database is already populated
+            if (context.SubCategories.Any())
             {
 
-                // Seeding
-                var bevrageSubCategory = new SubCategory { Name = "Beverages ", ID = 1 };
-                var mainCourseSubCategory = new SubCategory { Name = "Main Courses " };
-                var dessertSubCategory = new SubCategory { Name = "Desserts " };
-
-                context.SubCategories.AddRange(bevrageSubCategory, mainCourseSubCategory, dessertSubCategory);
-                context.Products.AddRange(
-                    new Product
-                    {
-
-                        Name = "Vap",
-                        Price = 1.99,
-                        Description = "Refreshing carbonated beverage",
-                        Image = "soda.png",
-                        Available = true,
-                        SubCategoryId = bevrageSubCategory.ID
-
-                    },
-                    new Product
-                    {
-
-                        Name = "Iced Tea",
-                        Price = 1.99,
-                        Description = "Chilled tea served with ice",
-                        Image = "iced_tea.jpg",
-                        Available = true,
-                        SubCategoryId = bevrageSubCategory.ID
-
-                    },
-                    new Product
-                    {
-
-                        Name = "Fruit Smoothie",
-                        Price = 4.99,
-                        Description = "Blend of fresh fruits and yogurt",
-                        Image = "Blended-fruit-smoothies.jpg",
-                        Available = true,
-                        SubCategoryId = bevrageSubCategory.ID
-
-                    },
-                    new Product
-                    {
-
-                        Name = "Grilled Chicken Sandwich",
-                        Price = 8.99,
-                        Description = "Grilled chicken breast with fresh veggies on a bun",
-                        Image = "grilled_chicken_sandwich.jpg",
-                        Available = true,
-                        SubCategoryId = mainCourseSubCategory.ID
-
-                    },
-                    new Product
-                    {
-
-                        Name = "Classic Burger",
-                        Price = 10.99,
-                        Description = "Juicy beef patty with lettuce, tomato and cheese",
-                        Image = "Classic_Burger.jpg",
-                        Available = true,
-                        SubCategoryId = mainCourseSubCategory.ID
-
-                    },
-                    new Product
-                    {
-
-                        Name = "Vegetarian Pizza",
-                        Price = 10.99,
-                        Description = "Thin-crust pizza with assorted veggies",
-                        Image = "Vegetable-Pizza.jpg",
-                        Available = true,
-                        SubCategoryId = mainCourseSubCategory.ID
-
-                    },
-                    new Product
-                    {
-                        Name = "Grilled Salmon",
-                        Price = 12.99,
-                        Description = "Freshly grilled salmon fillet with lemon butter",
-                        Image = "grilled_Salmon.jpg",
-                        Available = true,
-                        SubCategoryId = mainCourseSubCategory.ID
-                    },
-
-
-                    new Product
-                    {
-
-                        Name = "Chocolate Brownie Sundae",
-                        Price = 5.99,
-                        Description = "Warm chocolate brownie topped with vanilla ice cream and hot fudge",
-                        Image = "Fudge_Sunday.jpg",
-                        Available = true,
-                        SubCategoryId = dessertSubCategory.ID
-
-
-                    },
-                    new Product
-                    {
-
-                        Name = "Cheesecake",
-                        Price = 6.99,
-                        Description = "Creamy and rich New York - style cheesecake",
-                        Image = "CheeseCake.jpg",
-                        Available = true,
-                        SubCategoryId = dessertSubCategory.ID
-
-
-                    },
-                    new Product
-                    {
-
-                        Name = "Fudge Brownie",
-                        Price = 4.99,
-                        Description = "Decadent chocolate fudge brownie",
-                        Image = "Brownie.jpg",
-                        Available = true,
-                        SubCategoryId = dessertSubCategory.ID
-
-
-                    },
-                    new Product
-                    {
-
-                        Name = "Tiramisu",
-                        Price = 8.99,
-                        Description = "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone",
-                        Image = "Tiramisu.jpg",
-                        Available = true,
-                        SubCategoryId = dessertSubCategory.ID
-
-                    }
-
-                    );
-
-                _context.SaveChanges();
-
+                Console.WriteLine("Database is already populated. Skipping seeding...");
 
 
             }
+            else
+            {
+                // Seeding
+
+
+                context.SubCategories.AddRange(bevrageSubCategory, mainCourseSubCategory, dessertSubCategory);
+                await context.SaveChangesAsync();  // Save changes to generate IDs
+
+
+            }
+
+            context.Products.AddRange(
+                        new Product
+                        {
+
+                            Name = "Vap",
+                            Price = 1.99,
+                            Description = "Refreshing carbonated beverage",
+                            Image = "soda.png",
+                            Available = true,
+                            SubCategoryId = bevrageSubCategory.ID
+
+                        },
+                        new Product
+                        {
+
+                            Name = "Iced Tea",
+                            Price = 1.99,
+                            Description = "Chilled tea served with ice",
+                            Image = "iced_tea.jpg",
+                            Available = true,
+                            SubCategoryId = bevrageSubCategory.ID
+                        },
+                        new Product
+                        {
+
+                            Name = "Fruit Smoothie",
+                            Price = 4.99,
+                            Description = "Blend of fresh fruits and yogurt",
+                            Image = "Blended-fruit-smoothies.jpg",
+                            Available = true,
+                            SubCategoryId = bevrageSubCategory.ID
+                        },
+                        new Product
+                        {
+
+                            Name = "Grilled Chicken Sandwich",
+                            Price = 8.99,
+                            Description = "Grilled chicken breast with fresh veggies on a bun",
+                            Image = "grilled_chicken_sandwich.jpg",
+                            Available = true,
+                            SubCategoryId = mainCourseSubCategory.ID
+                        },
+                        new Product
+                        {
+
+                            Name = "Classic Burger",
+                            Price = 10.99,
+                            Description = "Juicy beef patty with lettuce, tomato and cheese",
+                            Image = "Classic_Burger.jpg",
+                            Available = true,
+                            SubCategoryId = mainCourseSubCategory.ID
+                        },
+                        new Product
+                        {
+
+                            Name = "Vegetarian Pizza",
+                            Price = 10.99,
+                            Description = "Thin-crust pizza with assorted veggies",
+                            Image = "Vegetable-Pizza.jpg",
+                            Available = true,
+                            SubCategoryId = mainCourseSubCategory.ID
+                        },
+                        new Product
+                        {
+                            Name = "Grilled Salmon",
+                            Price = 12.99,
+                            Description = "Freshly grilled salmon fillet with lemon butter",
+                            Image = "grilled_Salmon.jpg",
+                            Available = true,
+                            SubCategoryId = mainCourseSubCategory.ID
+                        },
+
+
+                        new Product
+                        {
+
+                            Name = "Chocolate Brownie Sundae",
+                            Price = 5.99,
+                            Description = "Warm chocolate brownie topped with vanilla ice cream and hot fudge",
+                            Image = "Fudge_Sunday.jpg",
+                            Available = true,
+                            SubCategoryId = dessertSubCategory.ID
+
+                        },
+                        new Product
+                        {
+
+                            Name = "Cheesecake",
+                            Price = 6.99,
+                            Description = "Creamy and rich New York - style cheesecake",
+                            Image = "CheeseCake.jpg",
+                            Available = true,
+                            SubCategoryId = dessertSubCategory.ID
+
+
+                        },
+                        new Product
+                        {
+
+                            Name = "Fudge Brownie",
+                            Price = 4.99,
+                            Description = "Decadent chocolate fudge brownie",
+                            Image = "Brownie.jpg",
+                            Available = true,
+                            SubCategoryId = dessertSubCategory.ID
+
+
+                        },
+                        new Product
+                        {
+
+                            Name = "Tiramisu",
+                            Price = 8.99,
+                            Description = "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone",
+                            Image = "Tiramisu.jpg",
+                            Available = true,
+                            SubCategoryId = dessertSubCategory.ID
+
+                        }
+
+                        );
+
         }
+
+
+
     }
 }

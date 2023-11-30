@@ -1,13 +1,16 @@
 using AthenaResturantWebAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using AthenaResturantWebAPI.Controllers;
-using AthenaResturantWebAPI.Services; // Add the appropriate namespace for ProductServices
+using AthenaResturantWebAPI.Services;
+using Microsoft.AspNetCore.Identity;
+using System;
+using AthenaResturantWebAPI.Data.AppUser;
 
 namespace AthenaResturantWebAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +40,30 @@ namespace AthenaResturantWebAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Register Identity services
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+            })
+            .AddRoles<IdentityRole>()  // Add this line to enable roles
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+            using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+            {
+                // Obtain the necessary services
+                var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(); 
+                // Call the SeedData method
+                var seedDataService = new GeneralServices(appDbContext,userManager, roleManager);
+                await seedDataService.SeedData(appDbContext, userManager, roleManager);
+
+            }
+
+
+
 
             var app = builder.Build();
 
