@@ -189,13 +189,13 @@ namespace AthenaResturantWebAPI.Services
             // List of users to be seeded
             var users = new List<(string UserName, string NormalizedUserName, string Email, string NormalizedEmail, string Password, bool EmailConfirmed, bool LockoutEnabled)>
     {
-        // User data: (UserName, NormalizedUserName, Email, NormalizedEmail, Password, EmailConfirmed, LockoutEnabled)
-        ("Kim", "KIM", "kim@example.com", "KIM@EXAMPLE.COM", "Password123!", true, false),
-        ("Julia", "JULIA", "julia@example.com", "JULIA@EXAMPLE.COM", "Password123!", true, false),
-        ("Joel", "JOEL", "joel@example.com", "JOEL@EXAMPLE.COM", "Password123!", true, false),
-        ("Simon", "SIMON", "simon@example.com", "SIMON@EXAMPLE.COM", "Password123!", true, false),
-        ("Peter", "PETER", "peter@example.com", "PETER@EXAMPLE.COM", "Password123!", true, false),
-        ("Paul", "PAUL", "paul@example.com", "PAUL@EXAMPLE.COM", "Password123!", true, false)
+    // User data: (UserName, NormalizedUserName, Email, NormalizedEmail, Password, EmailConfirmed, LockoutEnabled)
+        ("kim@example.com", "KIM@EXAMPLE.COM", "kim@example.com", "KIM@EXAMPLE.COM", "Password123!", true, false),
+        ("julia@example.com", "JULIA@EXAMPLE.COM", "julia@example.com", "JULIA@EXAMPLE.COM", "Password123!", true, false),
+        ("joel@example.com", "JOEL@EXAMPLE.COM", "joel@example.com", "JOEL@EXAMPLE.COM", "Password123!", true, false),
+        ("simon@example.com", "SIMON@EXAMPLE.COM", "simon@example.com", "SIMON@EXAMPLE.COM", "Password123!", true, false),
+        ("peter@example.com", "PETER@EXAMPLE.COM", "peter@example.com", "PETER@EXAMPLE.COM", "Password123!", true, false),
+        ("paul@example.com", "PAUL@EXAMPLE.COM", "paul@example.com", "PAUL@EXAMPLE.COM", "Password123!", true, false)
     };
 
             // Iterate through each user data and seed the user
