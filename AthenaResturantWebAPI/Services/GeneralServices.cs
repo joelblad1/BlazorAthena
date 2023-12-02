@@ -335,13 +335,22 @@ namespace AthenaResturantWebAPI.Services
 
                 new Food
                 {
-                    Nuts = false
-
+                    Nuts = false,
+                    Lactose = false
                 },
                                     new Food
                                     {
-                                        Lactose = false
+                                        Nuts = false,
+                                        Lactose = true
 
+                                    }, new Food
+                                    {
+                                        Nuts = true,
+                                        Lactose = true
+                                    }, new Food
+                                    {
+                                        Nuts = true,
+                                        Lactose = false
                                     }
 
                 );
