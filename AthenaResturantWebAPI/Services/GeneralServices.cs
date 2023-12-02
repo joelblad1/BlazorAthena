@@ -35,12 +35,13 @@ namespace AthenaResturantWebAPI.Services
                 
                 if (!context.Products.Any())
                 {
-                    // Seed roles 
+                    // Seed Roles 
                     await SeedRoles(roleManager);
-                    await AssignSubCategoryId(context);
                     _context.SaveChanges();
                     // Seed Drinks and Foods
                     await AllergiesAndDrinks(context);
+                    // Seed Products
+                    await AssignSubCategoryId(context);
                     _context.SaveChanges();
                     // Seed Users
                     await SeedUsersAsync(userManager);
@@ -293,7 +294,7 @@ namespace AthenaResturantWebAPI.Services
                            {
 
 
-                               AlcoholPercentage = 49
+                               AlcoholPercentage = 25
 
 
 
@@ -311,7 +312,7 @@ namespace AthenaResturantWebAPI.Services
                            {
 
 
-                               AlcoholPercentage = 0.5m
+                               AlcoholPercentage = 0
 
 
 
@@ -395,7 +396,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Vap",
-                            Price = 1.99,
+                            Price = 1.99m,
                             Description = "Refreshing carbonated beverage",
                             Image = "soda.png",
                             Available = true,
@@ -407,7 +408,7 @@ namespace AthenaResturantWebAPI.Services
                                                 {
 
                                                     Name = "Beer",
-                                                    Price = 1.99,
+                                                    Price = 1.99m,
                                                     Description = "Arboga, refreshing carbonated beverage",
                                                     Image = "soda.png",
                                                     Available = true,
@@ -419,7 +420,7 @@ namespace AthenaResturantWebAPI.Services
                                                                         {
 
                                                                             Name = "Absinth",
-                                                                            Price = 1.99,
+                                                                            Price = 1.99m,
                                                                             Description = "Strong spirit",
                                                                             Image = "soda.png",
                                                                             Available = true,
@@ -430,7 +431,7 @@ namespace AthenaResturantWebAPI.Services
                                                                         {
 
                                                                             Name = "California Sirah",
-                                                                            Price = 1.99,
+                                                                            Price = 1.99m,
                                                                             Description = "Strong spirit",
                                                                             Image = "soda.png",
                                                                             Available = true,
@@ -442,7 +443,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Iced Tea",
-                            Price = 1.99,
+                            Price = 1.99m,
                             Description = "Chilled tea served with ice",
                             Image = "iced_tea.jpg",
                             Available = true,
@@ -453,7 +454,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Fruit Smoothie",
-                            Price = 4.99,
+                            Price = 4.99m,
                             Description = "Blend of fresh fruits and yogurt",
                             Image = "Blended-fruit-smoothies.jpg",
                             Available = true,
@@ -464,7 +465,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Grilled Chicken Sandwich",
-                            Price = 8.99,
+                            Price = 8.99m,
                             Description = "Grilled chicken breast with fresh veggies on a bun",
                             Image = "grilled_chicken_sandwich.jpg",
                             Available = true,
@@ -475,7 +476,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Classic Burger",
-                            Price = 10.99,
+                            Price = 10.99m,
                             Description = "Juicy beef patty with lettuce, tomato and cheese",
                             Image = "Classic_Burger.jpg",
                             Available = true,
@@ -486,7 +487,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Vegetarian Pizza",
-                            Price = 10.99,
+                            Price = 10.99m,
                             Description = "Thin-crust pizza with assorted veggies",
                             Image = "Vegetable-Pizza.jpg",
                             Available = true,
@@ -496,7 +497,7 @@ namespace AthenaResturantWebAPI.Services
                         new Product
                         {
                             Name = "Grilled Salmon",
-                            Price = 12.99,
+                            Price = 12.99m,
                             Description = "Freshly grilled salmon fillet with lemon butter",
                             Image = "grilled_Salmon.jpg",
                             Available = true,
@@ -509,7 +510,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Chocolate Brownie Sundae",
-                            Price = 5.99,
+                            Price = 5.99m,
                             Description = "Warm chocolate brownie topped with vanilla ice cream and hot fudge",
                             Image = "Fudge_Sunday.jpg",
                             Available = true,
@@ -521,7 +522,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Cheesecake",
-                            Price = 6.99,
+                            Price = 6.99m,
                             Description = "Creamy and rich New York - style cheesecake",
                             Image = "CheeseCake.jpg",
                             Available = true,
@@ -534,7 +535,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Fudge Brownie",
-                            Price = 4.99,
+                            Price = 4.99m,
                             Description = "Decadent chocolate fudge brownie",
                             Image = "Brownie.jpg",
                             Available = true,
@@ -547,7 +548,7 @@ namespace AthenaResturantWebAPI.Services
                         {
 
                             Name = "Tiramisu",
-                            Price = 8.99,
+                            Price = 8.99m,
                             Description = "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone",
                             Image = "Tiramisu.jpg",
                             Available = true,
