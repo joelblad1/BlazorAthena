@@ -390,9 +390,49 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Refreshing carbonated beverage",
                             Image = "soda.png",
                             Available = true,
-                            SubCategoryId = bevrageSubCategory.ID
+                            SubCategoryId = bevrageSubCategory.ID,
+                            DrinkID = 3, 
+                            FoodID = 1
 
                         },
+                                                new Product
+                                                {
+
+                                                    Name = "Beer",
+                                                    Price = 1.99,
+                                                    Description = "Arboga, refreshing carbonated beverage",
+                                                    Image = "soda.png",
+                                                    Available = true,
+                                                    SubCategoryId = bevrageSubCategory.ID,
+                                                    DrinkID = 4,
+                                                    FoodID = 1
+
+                                                },
+                                                                        new Product
+                                                                        {
+
+                                                                            Name = "Absinth",
+                                                                            Price = 1.99,
+                                                                            Description = "Strong spirit",
+                                                                            Image = "soda.png",
+                                                                            Available = true,
+                                                                            SubCategoryId = bevrageSubCategory.ID,
+                                                                            DrinkID = 2,
+                                                                            FoodID = 1
+
+                                                                        }, new Product
+                                                                        {
+
+                                                                            Name = "California Sirah",
+                                                                            Price = 1.99,
+                                                                            Description = "Strong spirit",
+                                                                            Image = "soda.png",
+                                                                            Available = true,
+                                                                            SubCategoryId = bevrageSubCategory.ID,
+                                                                            DrinkID = 1,
+                                                                            FoodID = 1
+
+                                                                        },
                         new Product
                         {
 
@@ -401,7 +441,9 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Chilled tea served with ice",
                             Image = "iced_tea.jpg",
                             Available = true,
-                            SubCategoryId = bevrageSubCategory.ID
+                            SubCategoryId = bevrageSubCategory.ID,
+                            DrinkID = 3,
+                            FoodID = 1
                         },
                         new Product
                         {
@@ -411,7 +453,9 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Blend of fresh fruits and yogurt",
                             Image = "Blended-fruit-smoothies.jpg",
                             Available = true,
-                            SubCategoryId = bevrageSubCategory.ID
+                            SubCategoryId = bevrageSubCategory.ID,
+                            DrinkID = 3,
+                            FoodID = 1
                         },
                         new Product
                         {
@@ -421,7 +465,8 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Grilled chicken breast with fresh veggies on a bun",
                             Image = "grilled_chicken_sandwich.jpg",
                             Available = true,
-                            SubCategoryId = mainCourseSubCategory.ID
+                            SubCategoryId = mainCourseSubCategory.ID,
+                            FoodID = 1
                         },
                         new Product
                         {
@@ -431,7 +476,8 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Juicy beef patty with lettuce, tomato and cheese",
                             Image = "Classic_Burger.jpg",
                             Available = true,
-                            SubCategoryId = mainCourseSubCategory.ID
+                            SubCategoryId = mainCourseSubCategory.ID,
+                            FoodID = 2
                         },
                         new Product
                         {
@@ -441,7 +487,8 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Thin-crust pizza with assorted veggies",
                             Image = "Vegetable-Pizza.jpg",
                             Available = true,
-                            SubCategoryId = mainCourseSubCategory.ID
+                            SubCategoryId = mainCourseSubCategory.ID,
+                            FoodID = 2
                         },
                         new Product
                         {
@@ -450,7 +497,8 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Freshly grilled salmon fillet with lemon butter",
                             Image = "grilled_Salmon.jpg",
                             Available = true,
-                            SubCategoryId = mainCourseSubCategory.ID
+                            SubCategoryId = mainCourseSubCategory.ID,
+                            FoodID = 2
                         },
 
 
@@ -462,7 +510,8 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Warm chocolate brownie topped with vanilla ice cream and hot fudge",
                             Image = "Fudge_Sunday.jpg",
                             Available = true,
-                            SubCategoryId = dessertSubCategory.ID
+                            SubCategoryId = dessertSubCategory.ID,
+                            FoodID = 3
 
                         },
                         new Product
@@ -473,7 +522,8 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Creamy and rich New York - style cheesecake",
                             Image = "CheeseCake.jpg",
                             Available = true,
-                            SubCategoryId = dessertSubCategory.ID
+                            SubCategoryId = dessertSubCategory.ID,
+                            FoodID = 3
 
 
                         },
@@ -485,7 +535,8 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Decadent chocolate fudge brownie",
                             Image = "Brownie.jpg",
                             Available = true,
-                            SubCategoryId = dessertSubCategory.ID
+                            SubCategoryId = dessertSubCategory.ID,
+                            FoodID = 3
 
 
                         },
@@ -497,7 +548,9 @@ namespace AthenaResturantWebAPI.Services
                             Description = "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone",
                             Image = "Tiramisu.jpg",
                             Available = true,
-                            SubCategoryId = dessertSubCategory.ID
+                            SubCategoryId = dessertSubCategory.ID,
+                            DrinkID = 3,
+                            FoodID = 3
 
                         }
 

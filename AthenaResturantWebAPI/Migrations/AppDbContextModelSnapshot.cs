@@ -100,7 +100,7 @@ namespace AthenaResturantWebAPI.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Drinks");
+                    b.ToTable("Drinks", (string)null);
                 });
 
             modelBuilder.Entity("BlazorAthena.Models.Food", b =>
@@ -119,7 +119,7 @@ namespace AthenaResturantWebAPI.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Foods");
+                    b.ToTable("Foods", (string)null);
                 });
 
             modelBuilder.Entity("BlazorAthena.Models.Order", b =>
@@ -152,7 +152,7 @@ namespace AthenaResturantWebAPI.Migrations
 
                     b.HasIndex("OrderLineID");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("BlazorAthena.Models.OrderLine", b =>
@@ -173,7 +173,7 @@ namespace AthenaResturantWebAPI.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("OrderLines");
+                    b.ToTable("OrderLines", (string)null);
                 });
 
             modelBuilder.Entity("BlazorAthena.Models.Product", b =>
@@ -219,7 +219,7 @@ namespace AthenaResturantWebAPI.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("BlazorAthena.Models.SubCategory", b =>
@@ -236,7 +236,7 @@ namespace AthenaResturantWebAPI.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("SubCategories");
+                    b.ToTable("SubCategories", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
