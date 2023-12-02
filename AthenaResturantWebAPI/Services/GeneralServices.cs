@@ -392,7 +392,6 @@ namespace AthenaResturantWebAPI.Services
                             Available = true,
                             SubCategoryId = bevrageSubCategory.ID,
                             DrinkID = 3, 
-                            FoodID = 1
 
                         },
                                                 new Product
@@ -405,7 +404,6 @@ namespace AthenaResturantWebAPI.Services
                                                     Available = true,
                                                     SubCategoryId = bevrageSubCategory.ID,
                                                     DrinkID = 4,
-                                                    FoodID = 1
 
                                                 },
                                                                         new Product
@@ -418,7 +416,6 @@ namespace AthenaResturantWebAPI.Services
                                                                             Available = true,
                                                                             SubCategoryId = bevrageSubCategory.ID,
                                                                             DrinkID = 2,
-                                                                            FoodID = 1
 
                                                                         }, new Product
                                                                         {
@@ -430,7 +427,6 @@ namespace AthenaResturantWebAPI.Services
                                                                             Available = true,
                                                                             SubCategoryId = bevrageSubCategory.ID,
                                                                             DrinkID = 1,
-                                                                            FoodID = 1
 
                                                                         },
                         new Product
@@ -443,7 +439,6 @@ namespace AthenaResturantWebAPI.Services
                             Available = true,
                             SubCategoryId = bevrageSubCategory.ID,
                             DrinkID = 3,
-                            FoodID = 1
                         },
                         new Product
                         {
@@ -455,7 +450,6 @@ namespace AthenaResturantWebAPI.Services
                             Available = true,
                             SubCategoryId = bevrageSubCategory.ID,
                             DrinkID = 3,
-                            FoodID = 1
                         },
                         new Product
                         {
@@ -549,7 +543,7 @@ namespace AthenaResturantWebAPI.Services
                             Image = "Tiramisu.jpg",
                             Available = true,
                             SubCategoryId = dessertSubCategory.ID,
-                            DrinkID = 3,
+                            DrinkID = 4,
                             FoodID = 3
 
                         }
