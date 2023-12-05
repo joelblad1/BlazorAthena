@@ -1,4 +1,5 @@
 ﻿@using BlazorAthenaFrontend.Models
+@using AthenaResturantWebAPI.Controllers;
 @inject HttpClient httpClient
 @page "/foodmenu"
 @code {
@@ -11,12 +12,25 @@
         productList = await httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7088/api/Product");
         foodList = await httpClient.GetFromJsonAsync<List<Food>>("https://localhost:7088/api/Food");
         drinkList = await httpClient.GetFromJsonAsync<List<Drink>>("https://localhost:7088/api/Drink");
-
     }
 }
 
-<div style="display: flex; justify-content: space-between;">
 
+            <form asp-action="current-user1">
+            </form>
+
+
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="AccountController" asp-action="current-user1">Dash Board</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+</nav>
+<h1 class="display-4">Admin Panel Page</h1
+
+
+<div style="display: flex; justify-content: space-between;">
+    
     <div style="width: 45%; text-align: center; margin: 1rem;">
 		<h2>À la carte</h2>
         <br />
