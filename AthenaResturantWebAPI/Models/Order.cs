@@ -5,7 +5,6 @@ namespace BlazorAthena.Models
 {
     public class Order
     {
-        // känns klar
         [Key]
         public int ID { get; set; }
         [ForeignKey("OrderLine")]
@@ -16,6 +15,6 @@ namespace BlazorAthena.Models
         public DateTime TimeStamp { get; set; } = DateTime.Now;
         public string? KitchenComment { get; set; }
         public bool Delivered { get; set; } = false;
-
+        public decimal? SaleAmount { get; set; } = decimal.Zero;
     }
 }
