@@ -57,9 +57,9 @@ namespace AthenaResturantWebAPI.Services
             {
                 //var userID = "627764fe-39e4-4d51-88fc-0330207254d0";
                 //var roleName = "Employee";
-               
+
                 //await CheckUserRole(userID,roleName);
-               
+             
 
                 if (!context.Products.Any())
                 {
@@ -80,6 +80,8 @@ namespace AthenaResturantWebAPI.Services
                     await AssignUserRoleAsync(userManager, roleManager, "simon@example.com", "Admin");
                     await AssignUserRoleAsync(userManager, roleManager, "peter@example.com", "Manager");
                     await AssignUserRoleAsync(userManager, roleManager, "paul@example.com", "User");
+                    // Seed Claims / Roles
+                    await SeedRoleClaimsAsync(roleManager);
                     _context.SaveChanges();
                     // Seeds Order & OrderLine
                     await CreateOrder(context);
@@ -92,6 +94,56 @@ namespace AthenaResturantWebAPI.Services
                 Console.WriteLine($"An error occurred during seeding: {ex.Message}");
             }
         }
+
+        private static async Task SeedRoleClaimAsync(RoleManager<IdentityRole> roleManager, string roleName, string claimValue)
+        {
+            var role = await roleManager.FindByNameAsync(roleName);
+
+            if (role != null)
+            {
+                var existingClaims = await roleManager.GetClaimsAsync(role);
+
+                // Check if the claim is not already assigned to the role
+                if (!existingClaims.Any(c => c.Type == "custom_claim_type" && c.Value == claimValue))
+                {
+                    var newClaim = new Claim("custom_claim_type", claimValue, ClaimValueTypes.String);
+
+                    // Assign the claim to the role
+                    var result = await roleManager.AddClaimAsync(role, newClaim);
+
+                    if (result.Succeeded)
+                    {
+                        Console.WriteLine($"Claim '{claimValue}' added to role '{roleName}'.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to add claim '{claimValue}' to role '{roleName}'.");
+                        foreach (var error in result.Errors)
+                        {
+                            Console.WriteLine($"Error: {error.Description}");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Claim '{claimValue}' already assigned to role '{roleName}'.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Role '{roleName}' not found.");
+            }
+        }
+
+        public static async Task SeedRoleClaimsAsync(RoleManager<IdentityRole> roleManager)
+        {
+            await SeedRoleClaimAsync(roleManager, "User", "can_view_dashboard");
+            await SeedRoleClaimAsync(roleManager, "Admin", "can_manage_users");
+            await SeedRoleClaimAsync(roleManager, "Manager", "can_manage_content");
+            await SeedRoleClaimAsync(roleManager, "Employee", "can_access_employee_features");
+        }
+
+
 
         private async Task SeedRoleClaims(RoleManager<IdentityRole> roleManager, string roleName)
         {

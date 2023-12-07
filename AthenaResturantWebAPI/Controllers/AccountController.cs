@@ -6,7 +6,7 @@ using AthenaResturantWebAPI.Services;
 using System.Threading.Tasks;
 using AthenaResturantWebAPI.Data.AppUser;
 
-[Authorize] // Use the [Authorize] attribute to ensure the user is authenticated
+// [Authorize] // Use the [Authorize] attribute to ensure the user is authenticated
 public class AccountController : ControllerBase
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
