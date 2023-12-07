@@ -6,10 +6,12 @@ using AthenaResturantWebAPI.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using AthenaResturantWebAPI.Data.AppUser;
+using System.Security.Claims;
+
 
 namespace AthenaResturantWebAPI.Services
 {
-    public class GeneralServices
+    public class GeneralServices : ControllerBase
     {
 
       
@@ -25,14 +27,40 @@ namespace AthenaResturantWebAPI.Services
             _roleManager = roleManager;
 
         }
-    
+        public async Task<IActionResult> CheckUserRole(string userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                Console.WriteLine($"User Roles: {string.Join(", ", userRoles)}");
+
+                var isInRole = await _userManager.IsInRoleAsync(user, roleName);
+
+                if (isInRole)
+                {
+                    return Ok($"{user.UserName} is in the {roleName} role.");
+                }
+                else
+                {
+                    return Ok($"{user.UserName} is not in the {roleName} role.");
+                }
+            }
+
+            return BadRequest("User not found");
+        }
+
         public async Task SeedData(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             try
             {
+                //var userID = "627764fe-39e4-4d51-88fc-0330207254d0";
+                //var roleName = "Employee";
+
+                //await CheckUserRole(userID,roleName);
              
-              
-                
+
                 if (!context.Products.Any())
                 {
                     // Seed Roles 
@@ -46,12 +74,14 @@ namespace AthenaResturantWebAPI.Services
                     // Seed Users
                     await SeedUsersAsync(userManager);
                     _context.SaveChanges();
-                    await AssignUserRoleAsync(userManager, roleManager, "Kim", "Employee");
-                    await AssignUserRoleAsync(userManager, roleManager, "Julia", "Manager");
-                    await AssignUserRoleAsync(userManager, roleManager, "Joel", "Admin");
-                    await AssignUserRoleAsync(userManager, roleManager, "Simon", "Admin");
-                    await AssignUserRoleAsync(userManager, roleManager, "Peter", "Manager");
-                    await AssignUserRoleAsync(userManager, roleManager, "Pual", "User");
+                    await AssignUserRoleAsync(userManager, roleManager, "kim@example.com", "Employee");
+                    await AssignUserRoleAsync(userManager, roleManager, "julia@example.com", "Manager");
+                    await AssignUserRoleAsync(userManager, roleManager, "joel@example.com", "Admin");
+                    await AssignUserRoleAsync(userManager, roleManager, "simon@example.com", "Admin");
+                    await AssignUserRoleAsync(userManager, roleManager, "peter@example.com", "Manager");
+                    await AssignUserRoleAsync(userManager, roleManager, "paul@example.com", "User");
+                    // Seed Claims / Roles
+                    await SeedRoleClaimsAsync(roleManager);
                     _context.SaveChanges();
                     // Seeds Order & OrderLine
                     await CreateOrder(context);
@@ -63,6 +93,79 @@ namespace AthenaResturantWebAPI.Services
                 // Handle any unexpected exception (log, throw, etc.)
                 Console.WriteLine($"An error occurred during seeding: {ex.Message}");
             }
+        }
+
+        private static async Task SeedRoleClaimAsync(RoleManager<IdentityRole> roleManager, string roleName, string claimValue)
+        {
+            var role = await roleManager.FindByNameAsync(roleName);
+
+            if (role != null)
+            {
+                var existingClaims = await roleManager.GetClaimsAsync(role);
+
+                // Check if the claim is not already assigned to the role
+                if (!existingClaims.Any(c => c.Type == "custom_claim_type" && c.Value == claimValue))
+                {
+                    var newClaim = new Claim("custom_claim_type", claimValue, ClaimValueTypes.String);
+
+                    // Assign the claim to the role
+                    var result = await roleManager.AddClaimAsync(role, newClaim);
+
+                    if (result.Succeeded)
+                    {
+                        Console.WriteLine($"Claim '{claimValue}' added to role '{roleName}'.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to add claim '{claimValue}' to role '{roleName}'.");
+                        foreach (var error in result.Errors)
+                        {
+                            Console.WriteLine($"Error: {error.Description}");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Claim '{claimValue}' already assigned to role '{roleName}'.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Role '{roleName}' not found.");
+            }
+        }
+
+        public static async Task SeedRoleClaimsAsync(RoleManager<IdentityRole> roleManager)
+        {
+            await SeedRoleClaimAsync(roleManager, "User", "can_view_dashboard");
+            await SeedRoleClaimAsync(roleManager, "Admin", "can_manage_users");
+            await SeedRoleClaimAsync(roleManager, "Manager", "can_manage_content");
+            await SeedRoleClaimAsync(roleManager, "Employee", "can_access_employee_features");
+        }
+
+
+
+        private async Task SeedRoleClaims(RoleManager<IdentityRole> roleManager, string roleName)
+        {
+            // Retrieve the role by its name
+            var role = await roleManager.FindByNameAsync(roleName);
+
+            // Check if the role has any claims
+            var existingClaims = await roleManager.GetClaimsAsync(role);
+
+            // Add role claims if they don't exist
+            if (!existingClaims.Any(c => c.Type == "YourClaimType" && c.Value == "YourClaimValue"))
+            {
+                // Add the role claims you need for the specific role
+                await roleManager.AddClaimAsync(role, new Claim("YourClaimType", "YourClaimValue"));
+                Console.WriteLine($"Role claim added for '{roleName}'.");
+            }
+            else
+            {
+                Console.WriteLine($"Role claim for '{roleName}' already exists.");
+            }
+
+            // Add more role claims as needed
         }
 
         public async Task CreateOrder(AppDbContext _context)
@@ -267,8 +370,12 @@ namespace AthenaResturantWebAPI.Services
             {
                 if (!await roleManager.RoleExistsAsync(role))
                 {
+                    // SeedRoles
                     await roleManager.CreateAsync(new IdentityRole(role));
                     Console.WriteLine($"Role '{role}' created.");
+
+                    // Seed role claims for the newly created role
+                    await SeedRoleClaims(roleManager, role);
                 }
                 else
                 {
