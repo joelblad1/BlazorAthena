@@ -2,42 +2,42 @@
 using Newtonsoft.Json;
 using System.Text;
 using BlazorAthenaFrontend.Data;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Net.Http;
 
 namespace BlazorAthenaFrontend.Data
 {
     public class ImageService
     {   
         string APIDOMAIN = Globals.APIDOMAIN;
-        private readonly HttpClient httpclient;
+        string CONTROLLERNAME = "Image";
 
-        public async Task<SubCategory[]> GetSubCategoryAsync()
+        public async Task<string[]> GetImagesAsync()
         {
             using (var httpClient = new HttpClient())
             {
-                /*
-                var response = await httpClient.GetAsync($"{APIDOMAIN}/SubCategory"); //TODO global variable
+                var response = await httpClient.GetAsync($"{APIDOMAIN}/{CONTROLLERNAME}"); 
                 if (response.IsSuccessStatusCode)
                 {
-                    var subs = await response.Content.ReadFromJsonAsync<SubCategory[]>();
-                    return subs;
+                    var imgs = await response.Content.ReadFromJsonAsync<string[]>();
+                    return imgs;
                 }
                 else
                 {
                     // Handle the unsuccessful response here
                     return null;
                 }
-                */
-                    return null;
             }
         }
-        public async Task<bool> UploadImage(IFormFile image)
+        public async Task<bool> UploadImage(IBrowserFile image)
         {
+            HttpClient http = new HttpClient();
             var formData = new MultipartFormDataContent();
             formData.Add(new StreamContent(image.OpenReadStream())
             {
-                Headers = { ContentLength = image.Length, ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(image.ContentType) }
-            }, "image", image.FileName);
-            var response = await httpclient.PostAsync(APIDOMAIN+"/Image", formData);
+                Headers = { ContentLength = image.Size, ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(image.ContentType) }
+            }, "image", image.Name);
+            var response = await http.PostAsync(APIDOMAIN+"/Image", formData);
 
             if (response.IsSuccessStatusCode)
             {
@@ -48,36 +48,22 @@ namespace BlazorAthenaFrontend.Data
                 return false;
             }
 
-            /*
-            HttpClient http = new HttpClient();
-            var newSubCategory = new SubCategory { ID = 0, Name = name };
-            var stringContent = new StringContent(JsonConvert.SerializeObject(newSubCategory), Encoding.UTF8, "application/json");
-
-            var response = await http.PostAsync($"{APIDOMAIN}/SubCategory/", stringContent); //TODO global variable for api domain
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("success");
-
-            }
-            else { Console.WriteLine("failed"); }
-            */
-
         }
 
 
-        public async Task DeleteSubCategory(int id)
+        public async Task Delete(string filename)
         {
-            /*
             HttpClient http = new HttpClient();
-            
-            var response = await http.DeleteAsync($"{APIDOMAIN}/SubCategory/{id}"); //TODO global variable for api domain
+            var response = await http.DeleteAsync($"{APIDOMAIN}/{CONTROLLERNAME}/{filename}");
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("success");
-
+                Console.WriteLine("succes");
             }
-            else { Console.WriteLine("failed"); }
-            */
+            else
+            {
+                // Handle the unsuccessful response here
+                Console.WriteLine("nah");
+            }
         }
 
          public async Task EditSubCategory(int id, string newName)

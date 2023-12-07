@@ -5,33 +5,44 @@
 @inject ImageService ImageService
 <PageTitle>img test</PageTitle>
 
+<h3>File Upload</h3>
 
-<InputFile OnChange="@LoadFiles" multiple />
+@if (imgs != null)
+{
+    
+    @foreach (var img in imgs)
+    {
+       <tr>
+           <td>@img<button @onclick="@(e => Del(@img))">Delete</button></td>
+       </tr> 
+    }
+
+}
+<InputFile OnChange="@OnInputFileChange" />
 
 @code {
-    private List<IBrowserFile> loadedFiles = new();
-    private long maxFileSize = 1024 * 15;
-    private int maxAllowedFiles = 3;
-    private bool isLoading;
+    string[] imgs = null;
 
-    private void LoadFiles(InputFileChangeEventArgs e)
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
-        isLoading = true;
-        loadedFiles.Clear();
-
-        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
-        {
-            try
-            {
-                loadedFiles.Add(file);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("File: {FileName} Error: {Error}",
-                    file.Name, ex.Message);
-            }
-        }
-
-        isLoading = false;
+        var file = e.File;
+        ImageService.UploadImage(file);
     }
+
+    private async Task GetImage()
+    {
+        //
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        imgs = await ImageService.GetImagesAsync();
+    }
+
+     public async void Del(string filename)
+    {
+        ImageService.Delete(filename);
+    }
+
 }
+
