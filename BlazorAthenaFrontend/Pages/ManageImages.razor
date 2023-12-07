@@ -1,0 +1,37 @@
+﻿@page "/images" 
+@using BlazorAthenaFrontend.Data
+@using Microsoft.CodeAnalysis.Elfie.Diagnostics
+@using Microsoft.Extensions.Logging
+@inject ImageService ImageService
+<PageTitle>img test</PageTitle>
+
+
+<InputFile OnChange="@LoadFiles" multiple />
+
+@code {
+    private List<IBrowserFile> loadedFiles = new();
+    private long maxFileSize = 1024 * 15;
+    private int maxAllowedFiles = 3;
+    private bool isLoading;
+
+    private void LoadFiles(InputFileChangeEventArgs e)
+    {
+        isLoading = true;
+        loadedFiles.Clear();
+
+        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        {
+            try
+            {
+                loadedFiles.Add(file);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("File: {FileName} Error: {Error}",
+                    file.Name, ex.Message);
+            }
+        }
+
+        isLoading = false;
+    }
+}
