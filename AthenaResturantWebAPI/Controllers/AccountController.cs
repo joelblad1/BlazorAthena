@@ -4,15 +4,16 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using AthenaResturantWebAPI.Services;
 using System.Threading.Tasks;
+using AthenaResturantWebAPI.Data.AppUser;
 
 [Authorize] // Use the [Authorize] attribute to ensure the user is authenticated
 public class AccountController : ControllerBase
 {
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly JwtService _jwtService;
 
-    public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, JwtService jwtService)
+    public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, JwtService jwtService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
@@ -75,9 +76,8 @@ public class AccountController : ControllerBase
 
         // Retrieve the user's roles
         var roles = await _userManager.GetRolesAsync(user);
-        return NotFound();
         // Generate the JWT token
-        /*
+        
         var token = _jwtService.GenerateJwtToken(user.Id, user.Email, roles.ToList());
 
         // Now 'user' contains the IdentityUser object for the current user
@@ -88,6 +88,6 @@ public class AccountController : ControllerBase
             Email = user.Email,
             Token = token,
             // Add any other properties you want to expose
-        });*/
+        });
     }
 }
