@@ -43,6 +43,8 @@ namespace AthenaResturantWebAPI
             });
 
 
+            // JwtService
+            builder.Services.AddScoped<JwtService>();
 
 
             // AddScoped for ProductServices
