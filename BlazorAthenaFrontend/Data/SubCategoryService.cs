@@ -13,7 +13,7 @@ namespace BlazorAthenaFrontend.Data
         {
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.GetAsync($"{APIDOMAIN}/SubCategory"); //TODO global variable
+                var response = await httpClient.GetAsync($"{APIDOMAIN}/SubCategory"); 
                 if (response.IsSuccessStatusCode)
                 {
                     var subs = await response.Content.ReadFromJsonAsync<SubCategory[]>();
@@ -32,7 +32,7 @@ namespace BlazorAthenaFrontend.Data
             var newSubCategory = new SubCategory { ID = 0, Name = name };
             var stringContent = new StringContent(JsonConvert.SerializeObject(newSubCategory), Encoding.UTF8, "application/json");
 
-            var response = await http.PostAsync($"{APIDOMAIN}/SubCategory/", stringContent); //TODO global variable for api domain
+            var response = await http.PostAsync($"{APIDOMAIN}/SubCategory/", stringContent); 
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("success");
@@ -47,7 +47,7 @@ namespace BlazorAthenaFrontend.Data
         {
             HttpClient http = new HttpClient();
             
-            var response = await http.DeleteAsync($"{APIDOMAIN}/SubCategory/{id}"); //TODO global variable for api domain
+            var response = await http.DeleteAsync($"{APIDOMAIN}/SubCategory/{id}"); 
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("success");
@@ -62,7 +62,7 @@ namespace BlazorAthenaFrontend.Data
             var updatedSubCategory = new SubCategory { ID = 0, Name = newName };
             var stringContent = new StringContent(JsonConvert.SerializeObject(updatedSubCategory), Encoding.UTF8, "application/json");
 
-            var response = await http.PutAsync($"{APIDOMAIN}/SubCategory/{id}", stringContent ); //TODO global variable for api domain
+            var response = await http.PutAsync($"{APIDOMAIN}/SubCategory/{id}", stringContent ); 
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("success");

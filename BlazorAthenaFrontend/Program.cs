@@ -50,6 +50,8 @@ namespace BlazorAthenaFrontend
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<SubCategoryService>();
             builder.Services.AddScoped<JwtDecoderService>();
+            builder.Services.AddSingleton<ImageService>();
+
             builder.Services.AddScoped<ProductService>();
 
             builder.Services.AddHttpClient<ProductService>(client =>
